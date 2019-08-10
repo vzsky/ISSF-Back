@@ -1,17 +1,20 @@
 const Joi = require('@hapi/joi');
 
-const JoiSchema = {
-    username : Joi.string().min(4).required(),
-    password : Joi.string().min(6).required(),
-};
-
 const RegistValidate = (data) => {
-    let Validation = Joi.validate(data, JoiSchema);
+    let Schema = {
+        username : Joi.string().min(4).required(),
+        password : Joi.string().min(6).required(),
+    };
+    let Validation = Joi.validate(data, Schema);
     return Validation;
 };
 
 const LoginValidate = (data) => {
-    let Validation = Joi.validate(data, JoiSchema);
+    let Schema = {
+        username : Joi.string().min(4).required(),
+        password : Joi.string().min(6).required(),
+    };
+    let Validation = Joi.validate(data, Schema);
     return Validation;
 };
 
