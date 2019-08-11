@@ -1,20 +1,26 @@
+const path = require('path');
+const __bin = path.join(__dirname, '../bin');
 const router = require('express').Router();
-const User = require('../models/users');
-const Schema = require('../models/validation');
-const bcrypt = require('bcryptjs')
+const User = require(path.join(__bin, 'users'));
+const Schema = require(path.join(__bin, 'validation'));
+const bcrypt = require('bcryptjs');
+const authentication = require(path.join(__bin, 'authen'));
+const api = require(path.join(__bin, 'apiview'));
+
+const isAuthenicated = authentication.token_verify;
 
 
 router.post('/register', async (req, res) => {
 
     let Validation = Schema.RegistValidate(req.body);
     if (Validation.error){
-        return res.status(400).send(Validation.error.details[0].message);
+        return api.ErrHandler(res, 400, Validation.error.details[0].message);
     }
     let valid = Validation.value;
 
     let UserExist = await User.findOne({username : valid.username});
     if (UserExist) {
-        return res.status(400).send("username already used");
+        return api.ErrHandler(res, 400, "username already used");
     }
 
     //hasing
@@ -28,27 +34,31 @@ router.post('/register', async (req, res) => {
 
     try {
         let savedUser = await user.save();
-        res.send(savedUser);
+        api.OkHandler(res, "user", savedUser);
     }catch (e){
-        return res.status(400).send(e);
+        return api.ErrHandler(res, 400, e);
     }
 });
 
 router.post('/login', async (req, res) => {
     let Validation = Schema.LoginValidate(req.body);
     if (Validation.error){
-        return res.status(400).send(Validation.error.details[0].message);
+        return api.ErrHandler(res, 400, Validation.error.details[0].message);
     }
 
     let user = await User.findOne({username : req.body.username});
     if (!user) {
-        return res.status(400).send("user not existed");
+        api.ErrHandler(res, 400, "user not exist");
     }
     
     let validPass = await bcrypt.compare(req.body.password, user.password);
-    if (!validPass) return res.status(400).send("Invalid password");
+    if (!validPass) api.ErrHandler(res, 400, Validation.error.details[0].message);
 
-    res.send("logged in");
+    api.OkHandler(res, "token", authentication.tokenize(user));
+});
+
+router.get('/token_test', isAuthenicated ,(req, res) => {
+    api.OkHandler(res, "message", "token verified");
 });
 
 module.exports = router;
