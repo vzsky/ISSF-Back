@@ -10,6 +10,13 @@ const UserSchema = new mongoose.Schema({
         type : String, 
         require : true, 
         min : 6,
+    },
+    permission : {
+        type : Number,
+        require : true,
+        min : 0,
+        max : 2,
+        default : 0,
     }
 });
 
