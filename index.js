@@ -15,11 +15,13 @@ mongoose.connect( process.env.DB_CONNECT, {useNewUrlParser : true}, () => {
 app.use(express.json());
 //Routes
 const _routedir = path.join(__dirname, 'routes');
-const authrouter = require(path.join(_routedir, 'auth.js'));
+const authrouter = require(path.join(_routedir, 'auth'));
+const registrouter = require(path.join(_routedir, 'regist'));
 
 // Using
 app.use('/auth', authrouter);
+app.use('/new', registrouter); // This should be remove on production
 
-app.listen(PORT, ()=> {
+app.listen(PORT, () => {
     console.log("running on ", PORT)
 });

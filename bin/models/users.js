@@ -17,7 +17,27 @@ const UserSchema = new mongoose.Schema({
         min : 0,
         max : 2,
         default : 0,
-    }
+    },
+    name : {
+        type : String,
+        require : true,
+    },
+    school : {
+        type : String,
+        require : true,
+    },
+    country : {
+        type : String,
+        require : true,
+    },
+    email : {
+        type : String,
+        require : false,
+    },
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref : "Project",
+    },
 });
 
 module.exports = mongoose.model('User', UserSchema);
