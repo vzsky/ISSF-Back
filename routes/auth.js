@@ -6,6 +6,7 @@ const Schema = require(path.join(__bin, 'validation'));
 const bcrypt = require('bcryptjs');
 const _auth = require(path.join(__bin, 'authen'));
 const jsonify = require(path.join(__bin, 'jsonify'));
+const devlog = require(path.join(__bin, 'log'));
 
 router.post('/login', async (req, res) => {
     let Validation = Schema.LoginValidate(req.body);
@@ -23,5 +24,3 @@ router.post('/login', async (req, res) => {
 
     jsonify(res, null, {token: _auth.tokenize(user)});
 });
-
-module.exports = router;
