@@ -3,6 +3,8 @@ const path = require('path');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+const _auth = require('./bin/authen');
+
 const app = express();
 const PORT = 5000;
 dotenv.config();
@@ -17,13 +19,13 @@ app.use(express.json());
 const _routedir = path.join(__dirname, 'routes');
 
 const authrouter = require(path.join(_routedir, 'auth'));
-const registrouter = require(path.join(_routedir, 'regist'));
 const profilerouter = require(path.join(_routedir, 'profile'));
+const adminrouter = require(path.join(_routedir, 'admin'));
 
 // Using
 app.use('/auth', authrouter);
-app.use('/new', registrouter); // This should be remove on production
 app.use('/profile', profilerouter);
+app.use('/admin', _auth.isAdmin, adminrouter);
 
 app.listen(PORT, () => {
     console.log("running on ", PORT)

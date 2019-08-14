@@ -39,6 +39,7 @@ async function isStudent (req, res, next) {
         let decoded = token_verify(req); 
         if (decoded.permission == 0 || decoded.permission == 2) {
             req.user = await findUser(decoded);
+            req.user.password = null;
             next();
         }
         else {
@@ -55,6 +56,7 @@ async function isTeacher (req, res, next) {
         let decoded = token_verify(req); 
         if (decoded.permission == 1 || decoded.permission == 2) {
             req.user = await findUser(decoded);
+            req.user.password = null;
             next();
         }
         else {
@@ -71,6 +73,7 @@ async function isUser (req, res, next) {
         let decoded = token_verify(req); 
         if (decoded.permission >= 0 && decoded.permission <= 2) {
             req.user = await findUser(decoded);
+            req.user.password = null;
             next();
         }
         else {
@@ -87,6 +90,7 @@ async function isAdmin (req, res, next) {
         let decoded = token_verify(req); 
         if (decoded.permission == 2) {
             req.user = await findUser(decoded);
+            req.user.password = null;
             next();
         }
         else {

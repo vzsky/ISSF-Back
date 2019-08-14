@@ -4,7 +4,7 @@ const router = require('express').Router();
 const _auth = require(path.join(__bin, 'authen'));
 const jsonify = require(path.join(__bin, 'jsonify'));
 
-router.get('/', _auth.isStudent, (req, res) => {
+router.get('/', _auth.isUser, (req, res) => {
     jsonify(res, null, {user:req.user});
 });
 

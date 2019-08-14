@@ -1,21 +1,23 @@
 const path = require('path');
 const __bin = path.join(__dirname, '../bin');
-const router = require('express').Router();
 const User = require(path.join(__bin, 'models', 'users'));
 const Project = require(path.join(__bin, 'models', 'project'));
 const Schema = require(path.join(__bin, 'validation'));
 const bcrypt = require('bcryptjs');
 const jsonify = require(path.join(__bin, 'jsonify'));
 
-router.post('/user', async (req, res) => {
+async function userRegist (req, res) {
 
     // req.body.project contains project code
     // send req.body.project = _id
-    ProjectFromCode = await Project.findOne({code : req.body.project});
-    if (!ProjectFromCode) {
-        return jsonify(res, "project not found", {httpcode : 400});
+    if (req.body.hasOwnProperty("project")) {
+        ProjectFromCode = await Project.findOne({code : req.body.project});
+        if (!ProjectFromCode) {
+            return jsonify(res, "project not found", {httpcode : 400});
+        }
+        req.body.project = ProjectFromCode._id;
     }
-    req.body.project = ProjectFromCode._id;
+
     // console.log(typeof req.body.project);
     // console.log(req.body.project);
     let Validation = Schema.RegistValidate(req.body);
@@ -50,9 +52,9 @@ router.post('/user', async (req, res) => {
     }catch (e){
         return jsonify(res, e, {httpcode : 400});
     }
-});
+}
 
-router.post('/project', async (req, res) => {
+async function projectRegist (req, res) {
 
     let Validation = Schema.ProjectValidate(req.body);
     if (Validation.error){
@@ -77,6 +79,9 @@ router.post('/project', async (req, res) => {
     }catch (e){
         return jsonify(res, e, {httpcode : 400});
     }
-});
+}
 
-module.exports = router;
+module.exports = {
+    userRegist : userRegist,
+    projectRegist : projectRegist,
+}
