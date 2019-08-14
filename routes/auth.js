@@ -13,7 +13,7 @@ router.post('/login', async (req, res) => {
         return jsonify(res, Validation.error.details[0].message, {httpcode : 400});
     }
 
-    let user = await User.findOne({username : req.body.username});
+    let user = await User.findOne({username : Validation.value.username});
     if (!user) {
         return jsonify(res, "user not exist", {httpcode : 400});
     }
@@ -22,10 +22,6 @@ router.post('/login', async (req, res) => {
     if (!validPass) api.ErrHandler(res, 400, Validation.error.details[0].message);
 
     jsonify(res, null, {token: _auth.tokenize(user)});
-});
-
-router.get('/token_test', _auth.isTeacher ,(req, res) => {
-    jsonify(res, null, {user:req.user});
 });
 
 module.exports = router;
