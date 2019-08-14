@@ -5,6 +5,7 @@ const Project = require(path.join(__bin, 'models', 'project'));
 const Schema = require(path.join(__bin, 'validation'));
 const bcrypt = require('bcryptjs');
 const jsonify = require(path.join(__bin, 'jsonify'));
+const devlog = require(path.join(__bin, 'log'));
 
 async function userRegist (req, res) {
 
@@ -48,6 +49,7 @@ async function userRegist (req, res) {
 
     try {
         let savedUser = await user.save();
+        devlog('"'+user.username+'" is created');
         jsonify(res, null, {user: savedUser});
     }catch (e){
         return jsonify(res, e, {httpcode : 400});
@@ -75,6 +77,7 @@ async function projectRegist (req, res) {
 
     try {
         let savedProject = await project.save();
+        devlog('"'+savedProject.code+'" is created');
         jsonify(res, null, {project: savedProject});
     }catch (e){
         return jsonify(res, e, {httpcode : 400});

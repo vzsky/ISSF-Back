@@ -22,5 +22,9 @@ router.post('/login', async (req, res) => {
     let validPass = await bcrypt.compare(req.body.password, user.password);
     if (!validPass) api.ErrHandler(res, 400, Validation.error.details[0].message);
 
+    devlog('"'+user.username + '" requests token successfully');
+
     jsonify(res, null, {token: _auth.tokenize(user)});
 });
+
+module.exports = router;

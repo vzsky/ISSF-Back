@@ -12,7 +12,6 @@ dotenv.config();
 
 //DB
 mongoose.connect( process.env.DB_CONNECT, {useNewUrlParser : true}, () => {
-    console.log("connected to mongoDB");
     devlog("connected to mongoDB");
 });
 
@@ -29,8 +28,6 @@ app.use('/auth', authrouter);
 app.use('/profile', profilerouter);
 app.use('/admin', _auth.isAdmin, adminrouter);
 
-app.listen(PORT, ()=> {
-    console.log("running on ", PORT);
+app.listen(PORT, () => {
     devlog("running on "+PORT);
-
 });
