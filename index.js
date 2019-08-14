@@ -2,6 +2,7 @@ const express = require("express");
 const path = require('path');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const devlog = require('./bin/log');
 
 const app = express();
 const PORT = 5000;
@@ -10,6 +11,7 @@ dotenv.config();
 //DB
 mongoose.connect( process.env.DB_CONNECT, {useNewUrlParser : true}, () => {
     console.log("connected to mongoDB");
+    devlog("connected to mongoDB");
 });
 
 app.use(express.json());
@@ -21,5 +23,6 @@ const authrouter = require(path.join(_routedir, 'auth.js'));
 app.use('/auth', authrouter);
 
 app.listen(PORT, ()=> {
-    console.log("running on ", PORT)
+    console.log("running on ", PORT);
+    devlog("running on "+PORT);
 });

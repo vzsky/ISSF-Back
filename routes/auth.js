@@ -6,6 +6,7 @@ const Schema = require(path.join(__bin, 'validation'));
 const bcrypt = require('bcryptjs');
 const _auth = require(path.join(__bin, 'authen'));
 const jsonify = require(path.join(__bin, 'jsonify'));
+const devlog = require(path.join(__bin, 'log'));
 
 
 
@@ -22,7 +23,7 @@ router.post('/register', async (req, res) => {
         return jsonify(res, "username already used", {httpcode : 400});
     }
 
-    //hasing
+    //hashing
     let salt = await bcrypt.genSalt(10);
     let hashedPass = await bcrypt.hash(valid.password, salt);
 
@@ -60,5 +61,6 @@ router.post('/login', async (req, res) => {
 router.get('/token_test', _auth.isTeacher ,(req, res) => {
     jsonify(res, null, {user:req.user});
 });
+
 
 module.exports = router;
