@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./base/head') %>
+    </head>
+    <body>
+        <form id="login">
+            <input type = "text" id= "username">
+            <input type = "password" id= "password">
+            <input type = "submit">
+        </form>
+        <h1 id="textbox"></h1>
+        <script type = "text/javascript">
+            $(document).ready(() => {
+                $("#login").on("submit", (event) => {
+                    event.preventDefault();
+                    let data = {"username" : $('input#username').val(), "password" : $('input#password').val()};
+                    $.ajax({
+                        url: '/api/auth/login', // url where to submit the request
+                        type : "POST", // type of action POST || GET
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        success : function(result) {
+                            console.log(`Request Status : ${result.status}`);
+                            if (result.status == 'Bad') {
+                                $('#textbox').html(result.error);
+                            }
+                            else {
+                                let token = result.token;
+                                let now = new Date();
+                                let time = now.getTime();
+                                time += 7*24*60*60*1000;
+                                now.setTime(time);
+                                let expire = now.toGMTString();
+                                document.cookie = `auth_token=${token};expires=${expire};`
+                                $('#textbox').html("logged in")
+                                console.log('do something with token store in cookie plssss');
+                            }
+                        },
+                        error: function(xhr, resp, text) {
+                            console.log(xhr, resp, text);
+                        }
+                    })
+                });
+            });
+        </script>
+    </body>
+</html>

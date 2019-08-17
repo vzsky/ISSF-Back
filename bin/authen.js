@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-const jsonify = require('./jsonify');
-const User = require('./models/users');
+const jwt = require('jsonwebtoken')
+const dotenv = require('dotenv')
+const jsonify = require('./jsonify')
+const User = require('./models/users')
 
-dotenv.config();
+dotenv.config()
 
 function tokenize(user) {
     let token = jwt.sign(
@@ -13,92 +13,92 @@ function tokenize(user) {
         },
         process.env.SECRETKEY,
         {expiresIn : "7 days"}
-    );
+    )
     return token
 }
 
 function findUser(decoded) {
-    let user = User.findById(decoded._id).populate('project');
-    return user;
+    let user = User.findById(decoded._id).populate('project')
+    return user
 }
 
 function token_verify(req) {
-    let token = req.header('auth-token');
-    if (!token) throw "No token";
+    let token = req.header('auth-token')
+    if (!token) throw "No token"
     try {
-        let decoded = jwt.verify(token, process.env.SECRETKEY);
-        return decoded;
+        let decoded = jwt.verify(token, process.env.SECRETKEY)
+        return decoded
     }
     catch (err) {
-        throw err;
+        throw err
     }
 }
 
 async function isStudent (req, res, next) {
     try {
-        let decoded = token_verify(req); 
+        let decoded = token_verify(req) 
         if (decoded.permission == 0 || decoded.permission == 2) {
-            req.user = await findUser(decoded);
-            req.user.password = null;
-            next();
+            req.user = await findUser(decoded)
+            req.user.password = null
+            next()
         }
         else {
-            throw "Not a student / admin";
+            throw "Not a student / admin"
         }
     }
     catch (err) {
-        jsonify(res, err, {httpcode : 400});
+        jsonify(res, err, {httpcode : 400})
     }
 }
 
 async function isTeacher (req, res, next) {
     try {
-        let decoded = token_verify(req); 
+        let decoded = token_verify(req) 
         if (decoded.permission == 1 || decoded.permission == 2) {
-            req.user = await findUser(decoded);
-            req.user.password = null;
-            next();
+            req.user = await findUser(decoded)
+            req.user.password = null
+            next()
         }
         else {
-            throw "Not a teacher/admin";
+            throw "Not a teacher/admin"
         }
     }
     catch (err) {
-        jsonify(res, err, {httpcode : 400});
+        jsonify(res, err, {httpcode : 400})
     }
 }
 
 async function isUser (req, res, next) {
     try {
-        let decoded = token_verify(req); 
+        let decoded = token_verify(req) 
         if (decoded.permission >= 0 && decoded.permission <= 2) {
-            req.user = await findUser(decoded);
-            req.user.password = null;
-            next();
+            req.user = await findUser(decoded)
+            req.user.password = null
+            next()
         }
         else {
-            throw "Not a user";
+            throw "Not a user"
         }
     }
     catch (err) {
-        jsonify(res, err, {httpcode : 400});
+        jsonify(res, err, {httpcode : 400})
     }
 }
 
 async function isAdmin (req, res, next) {
     try {
-        let decoded = token_verify(req); 
+        let decoded = token_verify(req) 
         if (decoded.permission == 2) {
-            req.user = await findUser(decoded);
-            req.user.password = null;
-            next();
+            req.user = await findUser(decoded)
+            req.user.password = null
+            next()
         }
         else {
-            throw "Not an admin";
+            throw "Not an admin"
         }
     }
     catch (err) {
-        jsonify(res, err, {httpcode : 400});
+        jsonify(res, err, {httpcode : 400})
     }
 }
 
@@ -108,4 +108,4 @@ module.exports = {
     isTeacher : isTeacher,
     isUser : isUser,
     isAdmin : isAdmin,
-};
+}

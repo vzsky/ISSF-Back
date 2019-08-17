@@ -1,11 +1,11 @@
 module.exports = function jsonify (res, err, msg) {
     if (err) {
-        msg.status = "Bad";
-        msg.error = err;
+        msg.status = "Bad"
+        msg.error = err
     }
     else {
-        msg.status = "OK";
+        msg.status = "OK"
     }
-    res.json(msg);
-    return 1;
+    res.json(msg)
+    return 1
 }
