@@ -175,24 +175,26 @@
 ```Underdevelopment```
 
 ## Structure
-- index.js
-- log.txt
-- .env
-- api
-    - apiroutes.js
-- bin
-    - models
-        - mongoosemodels.js
-    - alllibs.js
-- routes
-    - webroutes.js
-- templates
-    - ejstemps.ejs
-    
+```
+.
+|-- index.js
+|-- log.txt
+|-- .env
+|-- api
+|    `-- apiroutes.js
+|-- bin
+|   |-- models
+|   |    `-- mongoosemodels.js
+|   `-- alllibs.js
+|-- routes
+|    `- webroutes.js
+`-- templates
+     `- ejstemps.ejs
+```
 ## Contributors
 - Me (obviously)
 - [@JDerp](https://github.com/jDerp)
-- [parnikkapore (Maybe, Probably not)](https://github.com/parnikkapore)
+- [@parnikkapore (Maybe, Probably not)](https://github.com/parnikkapore)
 - [@itzmeowww](https://github.com/itzmeowww)
     
 - [@Non-J](https://github.com/Non-J) is making [a Flutter app](https://github.com/Non-J/kvis_sf_flutter)
