@@ -14,16 +14,14 @@
         {
             "status" : "Error",
             "http" : status,
-            "error" : err,
-            "message" : msg
+            "error" : err
         }
         ```
-___
 ## Authentication
-> Send a valid token receive form /auth as an header to verify...
-___
-## API_Route
+> Send a valid token receive form /api/auth/login as an header of 'auth_token' to verify...
+## API_Route /api/
 ### auth/
+#### login/
 - POST
     ```
     {
@@ -47,8 +45,48 @@ ___
         ]
     }
     ```
-___
-## Authenticated routes    
+### admin/
+#### create/
+- /user/
+    - Post
+    ```
+    {
+        "username" : usr,
+        "password" : pwd,
+        "permission" : 0-2,
+        "name" : myname,
+        "school" : school,
+        "country" : myschool,
+        * "email" : email,
+        * "project" : myprojectcode
+    }
+    * means not required
+    ```
+    - Return 
+    ```
+    {
+        "user" : {
+            ...
+        }
+    }
+    ```
+- /project/
+   - Post
+    ```
+    {
+        "name" : prjname,
+        "branch" : fewchoices,
+        "code" : prjcode,
+    }
+    ```
+    - Return 
+    ```
+    {
+        "project" : {
+            ...
+        }
+    }
+    ```
 ### announcements/
 #### all/
 - Return
@@ -135,3 +173,28 @@ ___
     ```
 ### forms/
 ```Underdevelopment```
+
+## Structure
+```
+.
+|-- index.js
+|-- log.txt
+|-- .env
+|-- api
+|    `-- apiroutes.js
+|-- bin
+|   |-- models
+|   |    `-- mongoosemodels.js
+|   `-- alllibs.js
+|-- routes
+|    `- webroutes.js
+`-- templates
+     `- ejstemps.ejs
+```
+## Contributors
+- Me (obviously)
+- [@JDerp](https://github.com/jDerp)
+- [@parnikkapore (Maybe, Probably not)](https://github.com/parnikkapore)
+- [@itzmeowww](https://github.com/itzmeowww)
+    
+- [@Non-J](https://github.com/Non-J) is making [a Flutter app](https://github.com/Non-J/kvis_sf_flutter)
