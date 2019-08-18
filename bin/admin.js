@@ -77,7 +77,7 @@ async function projectRegist (req, res) {
 
     try {
         let savedProject = await project.save()
-        devlog('"'+savedProject.code+'" is created')
+        devlog(`${savedProject.code}is created`)
         return jsonify(res, null, {project: savedProject})
     }catch (e){
         return jsonify(res, e, {httpcode : 400})

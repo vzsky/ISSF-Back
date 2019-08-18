@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
     let validPass = await bcrypt.compare(req.body.password, user.password)
     if (!validPass) return jsonify(res, "Password is incorrect", {httpcode : 400})
 
-    devlog('"'+user.username + '" requests token successfully')
+    devlog(`${user.username} requests token successfully`)
 
     return jsonify(res, null, {token: _auth.tokenize(user)})
 })

@@ -34,72 +34,50 @@ function token_verify(req) {
     }
 }
 
-async function isStudent (req, res, next) {
+async function hasPermission (req, permission, permissionErr) {
     try {
         let decoded = token_verify(req) 
-        if (decoded.permission == 0 || decoded.permission == 2) {
+        if (permission(decoded.permission)) {
             req.user = await findUser(decoded)
             req.user.password = null
-            next()
+            return true
         }
         else {
-            throw "Not a student / admin"
+            throw permissionErr
         }
     }
     catch (err) {
-        jsonify(res, err, {httpcode : 400})
+        req.err = err
+        return false
     }
+}
+
+async function isStudent (req, res, next) {
+    p = (usr) => (usr == 0 || usr == 2)?true:false
+    err = new Error("Not a Student")
+    await hasPermission(req, p, err)
+    next()
 }
 
 async function isTeacher (req, res, next) {
-    try {
-        let decoded = token_verify(req) 
-        if (decoded.permission == 1 || decoded.permission == 2) {
-            req.user = await findUser(decoded)
-            req.user.password = null
-            next()
-        }
-        else {
-            throw "Not a teacher/admin"
-        }
-    }
-    catch (err) {
-        jsonify(res, err, {httpcode : 400})
-    }
+    p = (usr) => (usr == 1 || usr == 2)?true:false
+    err = new Error("Not a Teacher")
+    await hasPermission(req, p, err)
+    next()
 }
 
 async function isUser (req, res, next) {
-    try {
-        let decoded = token_verify(req) 
-        if (decoded.permission >= 0 && decoded.permission <= 2) {
-            req.user = await findUser(decoded)
-            req.user.password = null
-            next()
-        }
-        else {
-            throw "Not a user"
-        }
-    }
-    catch (err) {
-        jsonify(res, err, {httpcode : 400})
-    }
+    p = (usr) => (usr == 0 || usr == 1 || usr == 2)?true:false
+    err = new Error("Not a User")
+    await hasPermission(req, p, err)
+    next()
 }
 
-async function isAdmin (req, res, next) {
-    try {
-        let decoded = token_verify(req) 
-        if (decoded.permission == 2) {
-            req.user = await findUser(decoded)
-            req.user.password = null
-            next()
-        }
-        else {
-            throw "Not an admin"
-        }
-    }
-    catch (err) {
-        jsonify(res, err, {httpcode : 400})
-    }
+async function isAdmin(req, res, next) {
+    p = (usr) => (usr == 2)?true:false
+    err = new Error("Not an Admin")
+    await hasPermission(req, p, err)
+    next()
 }
 
 module.exports = {
