@@ -5,7 +5,7 @@ const dotenv = require('dotenv')
 const devlog = require('./bin/log')
 
 const app = express()
-const PORT = 5000
+const PORT = 5001
 dotenv.config()
 
 //DB
